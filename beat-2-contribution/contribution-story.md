@@ -8,9 +8,8 @@ format criteria grade exactly that. Your course repo link is the whole submissio
 files and no evidence uploads are part of Assignment 5.
 
 **Contribution Number:** [1]
-**Student:** [Student name]
-**GitHub Username:** [your GitHub username, exactly as it appears on your profile - no @, no
-profile URL. Your comments upstream are identified by this name.]
+**Student:** Jacob Cho
+**GitHub Username:** jacho15
 **Issue:** [GitHub issue link]
 **Pull Request:** [GitHub PR link, once opened]
 
@@ -55,10 +54,9 @@ happened; these entries are the toolkit's own timeline.
 All four entries are graded. Keep every heading below, and fill each
 one in the week it belongs to.
 
-**Unit 5: [one line on the tool work]**
+**Unit 5: Built issue-scout and ran the first wild scan**
 
-[2-4 sentences: what you built (the scout, your strategy), what broke
-or fell short, what changed because of it.]
+2026-10-07: I turned the issue-select skill from Unit 1 into another skill called issue-scout and had the search strategy aimed at GPU, compiler, and inference repositories (NVIDIA, AMD, Tenstorrent, IREE, llama.cpp, vLLM). The skill ran three scans that graded 15 issues, and all 15 issues end up being rejected. They were mostly all rejected because someone else had already claimed the issue or opened a PR. However, for LLVM and IREE specifically, the scans found that they both forbid AI tool usage on their good first issues which my AI policy check actually only found by luck. I had to fix my rubric to follow adopted policies and to fail issues that are already completed. I then changed the strategy to skip banned repos and anything that had already been rejected. The "fixed" rubric still scores 18/20 on the unit-1-eval.
 
 **Unit 6: [one line on the tool work]**
 
