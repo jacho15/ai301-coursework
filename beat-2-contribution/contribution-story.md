@@ -58,11 +58,9 @@ one in the week it belongs to.
 
 2026-10-07: I turned the issue-select skill from Unit 1 into another skill called issue-scout and had the search strategy aimed at GPU, compiler, and inference repositories (NVIDIA, AMD, Tenstorrent, IREE, llama.cpp, vLLM). The skill ran three scans that graded 15 issues, and all 15 issues end up being rejected. They were mostly all rejected because someone else had already claimed the issue or opened a PR. However, for LLVM and IREE specifically, the scans found that they both forbid AI tool usage on their good first issues which my AI policy check actually only found by luck. I had to fix my rubric to follow adopted policies and to fail issues that are already completed. I then changed the strategy to skip banned repos and anything that had already been rejected. The "fixed" rubric still scores 18/20 on the unit-1-eval.
 
-**Unit 6: [one line on the tool work]**
+**Unit 6: Installed the voice-guard and posted my first claim**
 
-[2-4 sentences: the voice-guard, the repo-memory file. What broke or
-fell short, and what changed because of it. "Nothing broke" counts when
-it is true - say how you know.]
+2026-10-14: I added a voice check before I post which is just a hook that reads every `gh` comment that I post through Claude Code and checks it against my own voice guide. There is a singular voice guide that I created from merging my other 3 voice guides into one. I wrote 5 rules total for claims, questions, and pings. I swapped repro-check and plan-check I merged my three voice guides into one, wrote five upstream rules for claims, questions, and pings, and swapped repro-check and plan-check to the wild scopes. The wiring test blocked `gh issue comment --help` as it should, and my claim for the OpenVINO issue passed the guard and posted. Windows symlinks made copies of the guide instead of links, so I used pointer files. The guard checks my rules and not who wrote the words. OpenVINO's policy bars AI-generated communication, so I rewrote the first claim draft in my own words before posting. The only stop in the guard log is the wiring test, and every real check passed, so my rules held and nothing got blocked. I haven't written the repo memory file yet.
 
 **Unit 7: [one line on the tool work]**
 
@@ -78,24 +76,24 @@ drafted, what you did with the draft.]
 
 ## Why I Chose This Issue
 
-[1-2 paragraphs in your own words: how you searched, what your scan
-surfaced, what your scout's verdict said, why this issue fits your
-profile, and what you hope to learn. If your scout's verdict on it
-was reject and you chose it anyway, say so here and say why; choosing
-against your own tool silently is what loses points. Close with an
-honest read of the tool itself: where the scout fell short on a real
-wild search and what you changed or would change, or what convinced
-you it held up. **Record the link to your claim comment in this section too.**
-Not claimed yet? Write `claim pending` and today's date where the link goes,
-and add the link the moment your claim lands.]
+I picked an OpenVINO bug in the FakeConvert op. Constant folding gives different answers than the CPU kernel for small float8 values and for NaN. It's C++ numerics in an inference runtime, and it doesn't need a GPU.
+
+I didn't find it through my scout. I found it offline while I was looking at repos my first scans never reached. My first four scans graded 20 good first issues and rejected all 20. Eighteen of them failed on "Nobody else already on it," because strangers grab those issues within days. After that I added a query, Q5a, for fresh bugs with zero comments and no linked PR from the last 7 days, and split it by my fit profile so inference runtimes come first. Scan 5 graded this issue in its top five and accepted it with a moderate difficulty note. The note says the reference function is named in the report, but I'd need to confirm which result is the source of truth. The scout also graded it directly earlier, and that grade is saved next to the scans. I changed the query order after I'd already picked the issue, and the strategy file says so.
+
+The scout flagged two things. The "Friendly-issue signal" check failed, because the issue has no good first issue label and the opener isn't a maintainer. That check only ranks accepted issues, so it didn't change the verdict. The reporter also wrote an AI-generated summary. OpenVINO's AI policy bars auto-generated issues that don't describe first-hand observations, but the report has output from a real run, so my new "Written by a person who ran it" check passed it. OpenVINO's policy allows AI help if I understand and verify the work and disclose it in the PR.
+
+I hope to learn how a real inference runtime is organized and how bit-level rounding bugs get fixed and tested.
+
+Claim comment: https://github.com/openvinotoolkit/openvino/issues/38799#issuecomment-6181345301
+
+My read of the scout: It rejected correctly every time, but searching by good first issue just finds what everyone else finds. Patching the strategy fixed that. I also added a bot-ticket check to the rubric and took llama.cpp out because its policy bans AI-written PR text and replies, and I'd be working against it.
 
 **Toolkit**
 
-- Tool: issue-scout (your scout: your search strategy, your rubric),
-  and how you used it
-- What it produced: [the scan and its verdict on this issue, described]
-- Difficulties: [where it fell short, or "none met" if none did]
-- What changed: [what you patched or would update, or "nothing"]
+- Tool: issue-scout, my scout with my strategy and rubric. I ran a direct grade on the issue and a funnel scan.
+- What it produced: Scan 5 accepted this issue with a moderate difficulty note, along with a second OpenVINO issue and a TensorRT-LLM issue. It rejected two vLLM issues for existing fixes and an offered claim.
+- Difficulties: The label-based queries couldn't find an unlabeled issue. The ranking also capped this issue out of the top five until I split Q5. The Friendly-issue check fails fresh unlabeled bugs and the Response speed check came out unclear again.
+- What changed: Added Q5a and Q5b, dropped Q1 and Q1b, and dropped llama.cpp. Added the "Written by a person who ran it" check and replaced my scope row with the scope-feasible row and difficulty note. I didn't re-run the unit-1 regression after these patches.
 
 ---
 
