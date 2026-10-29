@@ -68,10 +68,9 @@ one in the week it belongs to.
 
 Later the same day I ran the gate on my pyhf branch. The first run stopped on my manifest's test row with 19 minuit errors. They came from the order of the test files. `test_init.py` ran before `test_pdf.py`, and on unmodified main that order gives the same 11 errors. I put `test_init.py` last and wrote the reason in the manifest. One of my edits to the manifest did not save, so a second run used the old order. I only noticed because the gate printed the old command. The third run passed all three repo checks (ruff lint, ruff format, and the tests my change touches, 138 s). Then it stopped before my pr-precheck could run. The claude CLI said I had hit my individual spend limit. So the gate has no pr-precheck verdict on this branch yet. That spend limit is on the CodePath account that my `claude` command line tool is logged into, not on my personal account. Since I could not run the gate's rubric step, I ran my pr-precheck by hand in my desktop session. It rejected my package the first time. My plan said the new test must fail on main and pass on the branch, but my test evidence only showed it passing. I added the run on main and graded again, and it accepted. This is a manual pass. It does not count as a gate pass. Because I could not get a gate pass, I forked, pushed, and opened the pull request myself from the browser (pull request #2779, 2026-10-23). I shipped around my own gate. I am writing that down here instead of leaving it out.
 
-**Unit 8: [one line on the tool work]**
+**Unit 8: Installed the PR-monitor, wrote my playbook, and waited**
 
-[2-4 sentences: the PR-monitor and your playbook. What it read, what it
-drafted, what you did with the draft.]
+2026-10-28: I installed the PR-monitor and wrote my playbook from pyhf's own merge history. Maintainers merge their own PRs the same day, but outside contributors wait much longer. The one outside PR that got merged after a wait took 47 days, and two outside PRs are open at 6 and 9 days with no review. So I set 21 days of quiet before a first nudge, 14 days after a maintainer reply, one nudge ever, and 45 days of silence after that nudge before I walk away. The free `--state` check read my PR as open, 5 days old, mergeable but behind main, review required, checks passing, and it called the state feedback-in. That was wrong. The only other comment is CodeRabbit's bot summary. The full run could not draft anything because the `claude` CLI said it was not logged in, so I have no drafted move. I did not post anything or send a nudge. My own rule says the first nudge is possible on 2026-11-13, so the move is to wait.
 
 ---
 
@@ -235,8 +234,9 @@ I forked pyhf, pushed the branch to my fork, and opened pull request #2779 from 
 **Maintainer Feedback:**
 
 - 2026-10-23: none yet. The pull request opened on 2026-10-23 (06:24 UTC). The checks that ran so far passed: the PR title check, pre-commit.ci and CodeFactor. The main CI workflows (CI/CD, Lint, Docs, CodeQL) say `action_required`, which I think means a maintainer has to approve them for a first-time contributor. CodeRabbit, a bot, posted a summary.
+- 2026-10-28: still none from a human. Five days after opening, the pull request has no reviews and no comments except CodeRabbit's summary and my own. GitHub says review is required. The checks that ran are passing (7 passing, 1 cancelled). The branch is mergeable but behind main. pyhf's other outside pull requests have waited 6 to 9 days with no review too, so this is normal quiet for the repo.
 
-**Status:** Awaiting review. The pull request is open and not a draft.
+**Status:** Awaiting review as of 2026-10-28. The pull request is open and not a draft. I have not nudged anyone. My playbook allows the first nudge on 2026-11-13.
 
 **Toolkit**
 
@@ -244,6 +244,10 @@ I forked pyhf, pushed the branch to my fork, and opened pull request #2779 from 
 - What it produced: Three runs on my pyhf branch. Two blocked on the manifest's test row (the same 11 minuit errors that main has when the test files run in that order). The third passed all three repo checks and then stopped before pr-precheck, because the claude CLI said I had hit my individual spend limit. I have no gate verdict from pr-precheck. A manual run of pr-precheck in my desktop session rejected the package once (my test evidence did not show the new test failing on main), then accepted it after I added that run.
 - Difficulties: The gate's checks run in `cmd.exe` on Windows, so the manifest rows use Windows paths. The full test file cannot be a must-pass row, since 19 of its tests fail on main on Windows. The order of test files mattered, and I only learned that from a gate block. The rubric pass needs the claude CLI, and my account hit its spend limit, so the gate stays shut until I can run it.
 - What changed: The manifest has three must-pass rows (ruff check, ruff format, and the tests the change touches, with `test_init.py` last and the reason written in the source column) and dated exclusions for the rest. I opened the pull request from the browser anyway, because the gate's rubric step could not run on the CodePath account. So the gate did not pass before I shipped. The manual pr-precheck pass was my substitute, and it is not the same thing. I should rerun the gate once the `claude` command line tool is on an account with credits.
+- Tool (2026-10-28): The PR-monitor and my playbook, run from my pyhf clone on the PR branch.
+- What it produced: The free `--state` read, which printed the PR's checks, review decision, mergeability, and quiet days. The full run produced no draft.
+- Difficulties: On Windows the first `--state` run crashed with a `UnicodeDecodeError`, because Python read `gh`'s output as cp1252 and the CodeRabbit comment has characters that are not in it. Setting `PYTHONUTF8=1` fixed it without editing the monitor. The monitor also called the state feedback-in because CodeRabbit's bot comment is newer than my last commit, so it would have drafted a review response to a bot. Last, the full run stopped because the `claude` CLI said it was not logged in, the same CLI that hit the spend limit in unit 7.
+- What changed: I set my own thresholds from pyhf's merge history (21 days for a first nudge). I wrote "bots are not reviews" into my playbook's response rules. I would change the monitor to ignore bot authors when it decides what counts as feedback. I did not draft or send a nudge by hand, because my own rule says to wait until 2026-11-13.
 
 ---
 
